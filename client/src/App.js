@@ -1,14 +1,16 @@
 import React, { Component } from "react";
-
 import logo from "./logo.svg";
-
 import "./App.css";
+import { BarcodeScanner } from "./BarcodeScanner/BarcodeScanner";
+import { Confirmation } from "./Confirmation/Confirmation";
+import { ScannerPhoto } from "./ScannerPhoto/ScannerPhoto";
 
 class App extends Component {
   state = {
     response: "",
     post: "",
-    responseToPost: ""
+    responseToPost: "",
+    page: "HOME"
   };
 
   componentDidMount() {
@@ -25,8 +27,8 @@ class App extends Component {
     return body;
   };
 
-  handleSubmit = async e => {
-    e.preventDefault();
+  handleSubmit = async () => {
+    console.log(this.state.post);
     const response = await fetch("/api/world", {
       method: "POST",
       headers: {
@@ -39,35 +41,39 @@ class App extends Component {
     this.setState({ responseToPost: body });
   };
 
+  onConfirm = images => {
+    console.log(images);
+    console.log("setting state");
+    this.setState({ post: images });
+    this.setState({ page: "HOME" });
+  };
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-        <p>{this.state.response}</p>
-        <form onSubmit={this.handleSubmit}>
-          <p>
-            <strong>Post to Server:</strong>
-          </p>
-          <input
-            type="text"
-            value={this.state.post}
-            onChange={e => this.setState({ post: e.target.value })}
+        {this.state.page === "BARCODESCANNER" ? (
+          <BarcodeScanner
+            onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
           />
-          <button type="submit">Submit</button>
-        </form>
+        ) : this.state.page === "CONFIRMATION" ? (
+          <Confirmation onConfirm={() => this.submitData()} />
+        ) : this.state.page === "SCANNERPHOTO" ? (
+          <ScannerPhoto onConfirm={images => this.onConfirm(images)} />
+        ) : this.state.page === "HOME" ? (
+          <>
+            <button onClick={() => this.setState({ page: "BARCODESCANNER" })}>
+              Open Barcode Scanner
+            </button>
+            <button onClick={() => this.handleSubmit()}>Submit</button>
+          </>
+        ) : (
+          <></>
+        )}
+
+        <p>{this.state.post}</p>
+
+        <p>{this.state.response}</p>
+
         <p>{this.state.responseToPost}</p>
       </div>
     );
