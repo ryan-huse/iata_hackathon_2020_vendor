@@ -2,6 +2,7 @@
   "name": "example-create-react-app-express",
   "version": "1.0.0",
   "scripts": {
+    "start": "npm run global-install && node server.js",
     "global-install": "npm install concurrently && concurrently --kill-others-on-fail \"npm install\" \"npm run client-install\"",
     "client-install": "cd client && npm install",
     "client": "cd client && npm start",
@@ -10,6 +11,7 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "dotenv": "^8.2.0",
     "express": "^4.16.4"
   },
   "devDependencies": {

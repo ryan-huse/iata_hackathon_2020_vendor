@@ -34,7 +34,7 @@ jobs:
           # deploy to Azure Web App.
 
           npm run global-install
-          npm run dev --if-present
+          cd client && npm run build
       - name: "Deploy to Azure WebApp"
         uses: azure/webapps-deploy@v1
         with:
