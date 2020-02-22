@@ -47,7 +47,8 @@ app.post("/api/world", async (req, res) => {
     {
       metadata: {
         photographer: req.body.photographer,
-        airline: req.body.airline
+        airline: req.body.airline,
+        airport: req.body.airport
       }
     }
   );
