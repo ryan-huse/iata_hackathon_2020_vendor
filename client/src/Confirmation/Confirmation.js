@@ -25,7 +25,7 @@ export const Confirmation = function({
 
   //imageSrc = picture;
   return (
-    <div className="wrapper">
+    <div className="page wrapper">
       {showOverlay && (
         <div className="overlay">
           <div className="modal">

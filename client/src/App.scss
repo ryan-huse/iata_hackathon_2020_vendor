@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 .App {
   font-family: "Roboto", sans-serif;
   font-size: 15px;
@@ -19,5 +21,31 @@
   .content {
     z-index: 0;
     height: 93%;
+  }
+
+  .page {
+    height: 100vh;
+  }
+
+  .button {
+    font-size: 15px;
+    border: none;
+    box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.35);
+    padding: 8px 40px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    width: 45%;
+
+    &.primary {
+      background-color: white;
+      color: #4c7b11;
+      border: 1px solid $borderColor;
+    }
+
+    &.secondary {
+      background-color: #4c7b11;
+      color: white;
+    }
   }
 }

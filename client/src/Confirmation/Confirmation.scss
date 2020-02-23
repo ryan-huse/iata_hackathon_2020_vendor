@@ -1,8 +1,7 @@
-$borderColor: #c4c4c4;
+@import "../variables.scss";
 
 .wrapper {
   position: relative;
-  height: 100vh;
 
   .overlay {
     position: absolute;
@@ -123,26 +122,4 @@ $borderColor: #c4c4c4;
 .buttons {
   display: flex;
   justify-content: space-around;
-
-  .button {
-    font-size: 15px;
-    border: none;
-    box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.35);
-    padding: 8px 40px;
-    border-radius: 5px;
-    text-transform: uppercase;
-    font-weight: 700;
-    width: 45%;
-
-    &.primary {
-      background-color: white;
-      color: #4c7b11;
-      border: 1px solid $borderColor;
-    }
-
-    &.secondary {
-      background-color: #4c7b11;
-      color: white;
-    }
-  }
 }
