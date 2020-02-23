@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
-import "./App.css";
+import "./App.scss";
+
 import { BarcodeScanner } from "./BarcodeScanner/BarcodeScanner";
 import { Confirmation } from "./Confirmation/Confirmation";
 import { ScannerPhoto } from "./ScannerPhoto/ScannerPhoto";
@@ -12,7 +13,10 @@ class App extends Component {
     responseToPost: "",
     page: "HOME",
     userId: "",
-    barcodeID: "CI 419454",
+    imageSrc: "",
+    barcodeID: "90060000001",
+    flightInfo: "CI 0757-SEA",
+    batteryType: "Wet Cell - WCBW"
   };
 
   componentDidMount() {
@@ -73,9 +77,49 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Confirmation
+          barcodeID={this.state.barcodeID}
+          flightInfo={this.state.flightInfo}
+          batteryType={this.state.batteryType}
+          imageSrc={this.state.imageSrc}
+          onBack={() => this.setState({ page: "SCANNERPHOTO" })}
+          onConfirm={() => this.submitData()}
+        />
+      </div>
+    );
+    /*return (
+      <div className="App">
         {this.state.page === "BARCODESCANNER" ? (
           <BarcodeScanner
             onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
+          />
+        ) : this.state.page === "CONFIRMATION" ? (
+          <Confirmation onConfirm={() => this.submitData()} />
+        ) : this.state.page === "SCANNERPHOTO" ? (
+          <ScannerPhoto onConfirm={images => this.onConfirm(images)} />
+        ) : this.state.page === "HOME" ? (
+          <>
+            <button onClick={() => this.setState({ page: "BARCODESCANNER" })}>
+              Open Barcode Scanner
+            </button>
+            <button onClick={() => this.handleSubmit()}>Submit</button>
+          </>
+        ) : (
+          <></>
+        )}
+
+        <p>{this.state.post}</p>
+        
+        <p>{this.state.response}</p>
+        <form onSubmit={this.handleSubmit}>
+          <p>
+            <strong>Post to Server:</strong>
+          </p>
+          Barcode #:
+          <input
+            type="text"
+            value={this.state.barcodeID}
+            onChange={e => this.setState({ barcodeID: e.target.value })}
           />
         ) : this.state.page === "CONFIRMATION" ? (
           <Confirmation onConfirm={() => this.submitData()} />
@@ -97,7 +141,7 @@ class App extends Component {
         <p>{this.state.response}</p>
         <p>{this.state.responseToPost}</p>
       </div>
-    );
+    );*/
   }
 }
 
