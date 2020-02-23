@@ -29,6 +29,24 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <img src="loading.gif" style="margin-top:10px" id="anim-loading" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/dynamsoft-javascript-barcode@7.3.0-v0/dist/dbr.js"
+      data-productKeys="t0068NQAAACTVuD0EGs/dmQkA81ffhMNHjD5s5agPuCo+XZrvg051gl0BZsag1eDnh20ONDLloRVRZLXXZMnV7IXH01kIkSk="
+    ></script>
+    <script>
+      let scanner = null;
+      (async () => {
+        scanner = await Dynamsoft.BarcodeScanner.createInstance();
+        scanner.onFrameRead = results => {
+          window.results = results;
+          scanner.hide();
+        };
+        scanner.onUnduplicatedRead = (txt, result) => {
+          alert(txt);
+        };
+        await scanner.show();
+      })();
+    </script>
     <script src="https://demo.dynamsoft.com/dbr_wasm/js/dbr-6.4.1.3.min.js"></script>
     <script>
       dynamsoft.dbrEnv.resourcesPath = "https://demo.dynamsoft.com/dbr_wasm/js";

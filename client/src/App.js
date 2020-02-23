@@ -1,3 +1,4 @@
+import Dynamsoft from "dynamsoft-node-barcode";
 import React, { Component } from "react";
 import "./App.css";
 import { BarcodeScanner } from "./BarcodeScanner/BarcodeScanner";
@@ -17,12 +18,6 @@ class App extends Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
-  // componentDidMount() {
-  //   this.callApi()
-  //     .then(res => this.setState({ response: res.express }))
-  //     .catch(err => console.log(err));
-  // }
 
   handleFileUpload = async () => {
     var file = this.fileUpload.files[0];
@@ -113,6 +108,9 @@ class App extends Component {
           <></>
         )} */}
 
+        {/* <BarcodeScanner
+          onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
+        /> */}
         <input
           type="file"
           accept="image/*"
@@ -121,6 +119,7 @@ class App extends Component {
           onChange={this.handleFileUpload}
         ></input>
         <img
+          id="stuffs"
           style={{ display: "none" }}
           ref={ref => (this.imageTag = ref)}
           width="150"
