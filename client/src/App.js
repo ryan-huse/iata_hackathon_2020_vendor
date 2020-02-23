@@ -5,13 +5,15 @@ import "./App.scss";
 import { BarcodeScanner } from "./BarcodeScanner/BarcodeScanner";
 import { Confirmation } from "./Confirmation/Confirmation";
 import { ScannerPhoto } from "./ScannerPhoto/ScannerPhoto";
+import { Login } from "./Login/Login";
+import { WheelchairInfo } from "./WheelchairInfo/WheelchairInfo";
 
 class App extends Component {
   state = {
     response: "",
     post: "",
     responseToPost: "",
-    page: "HOME",
+    page: "LOGIN",
     userId: "",
     imageSrc: "",
     barcodeID: "90060000001",
@@ -73,13 +75,27 @@ class App extends Component {
     this.setState({ page: "CONFIRMATION" });
   };
 
+  onCallGuest = () => {
+    console.log("on call guest: not yet implemented");
+  };
+
   render() {
     return (
       <div className="App">
-        {this.state.page === "BARCODESCANNER" ? (
+        {this.state.page === "LOGIN" ? (
+          <Login onLogin={() => this.setState({ page: "BARCODESCANNER" })} />
+        ) : this.state.page === "BARCODESCANNER" ? (
           <BarcodeScanner
-            onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
+            onSuccess={() => this.setState({ page: "WHEELCHAIRINFO" })}
           />
+        ) : this.state.page === "WHEELCHAIRINFO" ? (
+          <WheelchairInfo
+            batteryType={this.state.batteryType}
+            onCallGuest={this.onCallGuest}
+            onTakePicture={() => this.setState({ page: "SCANNERPHOTO" })}
+          />
+        ) : this.state.page === "SCANNERPHOTO" ? (
+          <ScannerPhoto onConfirm={imageSrc => this.onConfirm(imageSrc)} />
         ) : this.state.page === "CONFIRMATION" ? (
           <Confirmation
             barcodeID={this.state.barcodeID}
@@ -88,16 +104,9 @@ class App extends Component {
             imageSrc={this.state.imageSrc}
             onBack={() => this.setState({ page: "SCANNERPHOTO" })}
             sendData={() => this.handleSubmit()}
+            onExit={() => this.setState({ page: "LOGIN" })}
+            onScanAgain={() => this.setState({ page: "BARCODESCANNER" })}
           />
-        ) : this.state.page === "SCANNERPHOTO" ? (
-          <ScannerPhoto onConfirm={imageSrc => this.onConfirm(imageSrc)} />
-        ) : this.state.page === "HOME" ? (
-          <>
-            <button onClick={() => this.setState({ page: "BARCODESCANNER" })}>
-              Open Barcode Scanner
-            </button>
-            <button onClick={() => this.handleSubmit()}>Submit</button>
-          </>
         ) : (
           <></>
         )}

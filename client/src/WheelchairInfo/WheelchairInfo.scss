@@ -1,0 +1,71 @@
+@import "../variables.scss";
+
+.imageContainer {
+  margin-top: 10%;
+  .photo {
+    max-width: 45%;
+  }
+}
+
+.grid {
+  .gridTitle {
+    background-color: #747474;
+    color: white;
+    padding: 10px;
+  }
+  .information {
+    font-size: 13px;
+
+    .infoItem {
+      .column {
+        padding: 10px;
+      }
+      .description {
+        display: flex;
+        align-items: center;
+        width: 27%;
+      }
+      .data {
+        width: 53%;
+        padding: 15px 5px 15px 5px;
+        white-space: nowrap;
+
+        .data-icon {
+          .batteryIcon {
+            width: 15%;
+          }
+        }
+      }
+
+      .instructionContainer {
+        width: 25%;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: $light-green;
+        font-weight: 700;
+
+        .instruction {
+          font-size: 12px;
+          border: none;
+          box-shadow: none;
+          padding: 0;
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+
+.messageContainer {
+  padding: 10px;
+  .title {
+    font-weight: 700;
+    font-size: 20px;
+    padding-bottom: 5px;
+  }
+
+  .message {
+    font-size: 15px;
+  }
+}
