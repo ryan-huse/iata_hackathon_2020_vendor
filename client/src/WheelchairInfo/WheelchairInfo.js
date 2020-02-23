@@ -5,9 +5,15 @@ import "./WheelchairInfo.scss";
 
 export const WheelchairInfo = function({
   batteryType,
-  onTakePicture,
-  onCallGuest
+  onCallGuest,
+  setImageFile,
+  showNextPage
 }) {
+  function handleFiles(e) {
+    setImageFile(e.target.files[0]);
+    showNextPage();
+  }
+
   return (
     <div className="page">
       <div className="header caution">!Caution</div>
@@ -54,9 +60,12 @@ export const WheelchairInfo = function({
         <button onClick={onCallGuest} className="button secondary">
           Back
         </button>
-        <button onClick={onTakePicture} className="button primary">
-          Take Picture
-        </button>
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={handleFiles}
+        ></input>
       </div>
     </div>
   );

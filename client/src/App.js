@@ -21,7 +21,7 @@ class App extends Component {
       barcodeID: "90060000001",
       flightInfo: "CI 0757-SEA",
       batteryType: "Wet Cell - WCBW",
-      fileUpload: null
+      imageFile: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -33,14 +33,13 @@ class App extends Component {
   // }
 
   handleSubmit = async e => {
-    var file = this.state.fileUpload.files[0];
     const airport = await fetch(
       "https://geolocation-qa-west.azurewebsites.net/api/lookup/resolve"
     )
       .then(async r => await r.json())
       .catch(err => console.log(err));
     var buffer = new Buffer(
-      await new Response(file).arrayBuffer(),
+      await new Response(this.state.imageFile).arrayBuffer(),
       "binary"
     ).toString("base64");
 
@@ -52,9 +51,9 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: file.name,
+        name: this.state.imageFile.name,
         file: buffer,
-        length: file.size,
+        length: this.state.imageFile.size,
         barcodeID: this.state.barcodeID,
         airline: "Delta",
         photographer: "109228",
@@ -89,6 +88,8 @@ class App extends Component {
   };
 
   render() {
+    const fileUploadRef = React.createRef();
+
     return (
       <div className="App">
         {this.state.page === "LOGIN" ? (
@@ -101,13 +102,16 @@ class App extends Component {
           <WheelchairInfo
             batteryType={this.state.batteryType}
             onCallGuest={this.onCallGuest}
-            onTakePicture={() => this.setState({ page: "SCANNERPHOTO" })}
+            setImageFile={imageFile => this.setState({ imageFile: imageFile })}
+            showNextPage={() => {
+              this.setState({ page: "CONFIRMATION" });
+            }}
           />
         ) : this.state.page === "SCANNERPHOTO" ? (
           <ScannerPhoto
             onChange={this.handle}
             onConfirm={imageSrc => this.onConfirm(imageSrc)}
-            updateFileUpload={ref => (this.state.fileUpload = ref)}
+            fileUploadRef={fileUploadRef}
             handleSubmit={value => this.handleSubmit(value)}
           />
         ) : this.state.page === "CONFIRMATION" ? (
@@ -115,17 +119,14 @@ class App extends Component {
             barcodeID={this.state.barcodeID}
             flightInfo={this.state.flightInfo}
             batteryType={this.state.batteryType}
-            imageSrc={this.state.imageSrc}
             onBack={() => this.setState({ page: "SCANNERPHOTO" })}
-            sendData={() => this.handleSubmit()}
+            handleSubmit={() => this.handleSubmit()}
             onExit={() => this.setState({ page: "LOGIN" })}
-            onScanAgain={() => this.setState({ page: "BARCODESCANNER" })}
+            imageFile={this.state.imageFile}
           />
         ) : (
           <></>
         )}
-
-        <div>{this.state.responseToPost}</div>
       </div>
     );
   }

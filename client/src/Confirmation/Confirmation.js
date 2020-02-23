@@ -8,21 +8,32 @@ export const Confirmation = function({
   barcodeID,
   flightInfo,
   batteryType,
-  imageSrc,
   onBack,
-  sendData,
+  handleSubmit,
   onExit,
-  onScanAgain
+  onScanAgain,
+  imageFile
 }) {
   const [showOverlay, updateShowOverlay] = useState(false);
+
   const showPopup = () => {
     updateShowOverlay(true);
   };
 
-  const onConfirm = () => {
+  const onConfirm = e => {
     showPopup();
-    sendData();
+    handleSubmit(e.target.value);
   };
+
+  async function handleFileUpload(imageRef) {
+    if (imageRef !== null && imageFile !== null) {
+      imageRef.src = `data:image/png;base64,${new Buffer(
+        await new Response(imageFile).arrayBuffer(),
+        "binary"
+      ).toString("base64")}`;
+      imageRef.style.display = "inline";
+    }
+  }
 
   return (
     <div className="page wrapper">
@@ -41,9 +52,7 @@ export const Confirmation = function({
                 <button onClick={onExit} className="button secondary">
                   No
                 </button>
-                <button onClick={onScanAgain} className="button primary">
-                  Yes
-                </button>
+                <button className="button primary">Yes</button>
               </div>
             </div>
           </div>
@@ -70,7 +79,12 @@ export const Confirmation = function({
             </div>
           </div>
           <div className="imageContainer">
-            <img className="photo" src={imageSrc} alt="image of wheelchair" />
+            <img
+              style={{ display: "none" }}
+              ref={ref => handleFileUpload(ref)}
+              width="150"
+              alt="Thumb preview..."
+            ></img>
           </div>
           <div className="buttons">
             <button onClick={onBack} className="button secondary">
