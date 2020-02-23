@@ -35,7 +35,7 @@ app.post("/api/world", async (req, res) => {
 
   const containerClient = blobServiceClient.getContainerClient(containerName);
   const content = req.body.file;
-  const blobName = req.body.barcodeID + "/" + req.body.name;
+  const blobName = req.body.barcodeID + "/" + req.body.name + Math.random();
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
   const uploadBlobResponse = await blockBlobClient.upload(
     content,
