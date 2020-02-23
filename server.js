@@ -9,9 +9,8 @@ require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: "50mb", extended: true }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 // API calls
 app.get("/api/gets", (req, res) => {
@@ -35,18 +34,18 @@ app.post("/api/world", async (req, res) => {
   const containerName = "requests";
 
   const containerClient = blobServiceClient.getContainerClient(containerName);
-
-  const content = req.body.post;
-  const blobName = req.body.barcodeID + "/" + req.body.date;
+  const content = req.body.file;
+  const blobName = req.body.barcodeID + "/" + req.body.name;
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
   const uploadBlobResponse = await blockBlobClient.upload(
     content,
-    content.length,
+    req.body.length,
     {
       metadata: {
         photographer: req.body.photographer,
         airline: req.body.airline,
-        airport: req.body.airport
+        airport: req.body.airport,
+        date: req.body.date
       }
     }
   );
@@ -54,9 +53,7 @@ app.post("/api/world", async (req, res) => {
     `Upload block blob ${blobName} successfully`,
     uploadBlobResponse.requestId
   );
-  res.send(
-    `Upload block blob ${blobName} successfully ${uploadBlobResponse.requestId}`
-  );
+  res.send(`Upload block blob ${"blobName"} successfully ${containerName}`);
 });
 
 if (process.env.NODE_ENV === "production") {

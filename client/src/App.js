@@ -9,62 +9,71 @@ import { Login } from "./Login/Login";
 import { WheelchairInfo } from "./WheelchairInfo/WheelchairInfo";
 
 class App extends Component {
-  state = {
-    response: "",
-    post: "",
-    responseToPost: "",
-    page: "LOGIN",
-    userId: "",
-    imageSrc: "",
-    barcodeID: "90060000001",
-    flightInfo: "CI 0757-SEA",
-    batteryType: "Wet Cell - WCBW"
-  };
-
-  componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: res.express }))
-      .catch(err => console.log(err));
+  constructor(props) {
+    super(props);
+    this.state = {
+      response: "",
+      post: "",
+      responseToPost: "",
+      page: "LOGIN",
+      userId: "",
+      imageSrc: "",
+      barcodeID: "90060000001",
+      flightInfo: "CI 0757-SEA",
+      batteryType: "Wet Cell - WCBW",
+      fileUpload: null
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  callApi = async () => {
-    const response = await fetch("/api/hello");
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
+  // componentDidMount() {
+  //   this.callApi()
+  //     .then(res => this.setState({ response: res.express }))
+  //     .catch(err => console.log(err));
+  // }
 
-    return body;
-  };
-
-  handleSubmit = async () => {
+  handleSubmit = async e => {
+    var file = this.state.fileUpload.files[0];
     const airport = await fetch(
-      "https://geolocation-qa-west.azurewebsites.net/api/lookup/resolve",
-      {
-        method: "GET"
-      }
+      "https://geolocation-qa-west.azurewebsites.net/api/lookup/resolve"
     )
       .then(async r => await r.json())
       .catch(err => console.log(err));
+    var buffer = new Buffer(
+      await new Response(file).arrayBuffer(),
+      "binary"
+    ).toString("base64");
+
+    console.log(buffer);
+
     const response = await fetch("/api/world", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        post: this.state.post,
+        name: file.name,
+        file: buffer,
+        length: file.size,
         barcodeID: this.state.barcodeID,
         airline: "Delta",
         photographer: "109228",
         date: new Date(),
-        airport: airport.ResolvedCity
-          ? airport.ResolvedCity.NearestAlaskaDestination
-            ? airport.ResolvedCity.NearestAlaskaDestination.Code
+        airport: airport
+          ? airport.ResolvedCity
+            ? airport.ResolvedCity.NearestAlaskaDestination
+              ? airport.ResolvedCity.NearestAlaskaDestination.Code
+              : ""
             : ""
           : ""
       })
-    });
-    const body = await response.text();
+    })
+      .then(info => console.log(info))
+      .catch(err => console.log(err));
 
-    this.setState({ responseToPost: body });
+    // const body = await response.text();
+
+    this.setState({ responseToPost: "airport" });
   };
 
   onConfirm = imageSrc => {
@@ -95,7 +104,12 @@ class App extends Component {
             onTakePicture={() => this.setState({ page: "SCANNERPHOTO" })}
           />
         ) : this.state.page === "SCANNERPHOTO" ? (
-          <ScannerPhoto onConfirm={imageSrc => this.onConfirm(imageSrc)} />
+          <ScannerPhoto
+            onChange={this.handle}
+            onConfirm={imageSrc => this.onConfirm(imageSrc)}
+            updateFileUpload={ref => (this.state.fileUpload = ref)}
+            handleSubmit={value => this.handleSubmit(value)}
+          />
         ) : this.state.page === "CONFIRMATION" ? (
           <Confirmation
             barcodeID={this.state.barcodeID}
@@ -110,6 +124,8 @@ class App extends Component {
         ) : (
           <></>
         )}
+
+        <div>{this.state.responseToPost}</div>
       </div>
     );
   }
