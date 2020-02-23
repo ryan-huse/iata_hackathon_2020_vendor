@@ -89,9 +89,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* {this.state.page === "BARCODESCANNER" ? (
+        {this.state.page === "BARCODESCANNER" ? (
           <BarcodeScanner
-            onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
+            onSuccess={txt => {
+              this.setState({ barcodeID: txt });
+              this.setState({ page: "SCANNERPHOTO" });
+            }}
           />
         ) : this.state.page === "CONFIRMATION" ? (
           <Confirmation onConfirm={() => this.submitData()} />
@@ -106,11 +109,8 @@ class App extends Component {
           </>
         ) : (
           <></>
-        )} */}
-
-        <BarcodeScanner
-          onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
-        />
+        )}{" "}
+        } />
         <input
           type="file"
           accept="image/*"
