@@ -108,9 +108,9 @@ class App extends Component {
           <></>
         )} */}
 
-        {/* <BarcodeScanner
+        <BarcodeScanner
           onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
-        /> */}
+        />
         <input
           type="file"
           accept="image/*"

@@ -2,14 +2,24 @@ import React from "react";
 import "./BarcodeScanner.css";
 
 export const BarcodeScanner = ({ onSuccess }) => {
+  const runStuff = async () => {
+    await window.scanner.updateVideoSettings({
+      video: {
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        facingMode: { ideal: "environment" }
+      }
+    });
+    await window.scanner.show();
+  };
+
   return (
     <div>
-      <h1>Scan Barcode</h1>
-      <span>
-        If the barode is properly registered, the photo page will automatically
-        pull up.
-      </span>
-      <button onClick={() => onSuccess()}>SUCCESSFUL</button>
+      <input
+        type="text"
+        value={window.results ? window.results[0].BarcodeText : ""}
+      ></input>
+      <button onClick={() => runStuff()}>Scan Barcode</button>
     </div>
   );
 };
