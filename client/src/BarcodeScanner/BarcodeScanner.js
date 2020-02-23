@@ -5,7 +5,9 @@ export const BarcodeScanner = ({ onSuccess }) => {
   return (
     <div className="page">
       <div className="header">Scan Barcode</div>
-      <button onClick={() => onSuccess()}>SUCCESSFUL</button>
+      <button className="button-barcode" onClick={() => onSuccess()}>
+        SUCCESSFUL
+      </button>
     </div>
   );
 };

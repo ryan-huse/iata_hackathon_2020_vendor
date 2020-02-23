@@ -18,8 +18,12 @@ export const WheelchairInfo = function({
     <div className="page">
       <div className="header caution">!Caution</div>
       <div className="content">
-        <div className="imageContainer">
-          <img className="photo" src={wc_parts} alt="image of wheelchair" />
+        <div className="">
+          <img
+            className="photo image-wheelchair"
+            src={wc_parts}
+            alt="image of wheelchair"
+          />
         </div>
         <div className="grid">
           <div className="gridTitle">Removeable Parts</div>
@@ -56,16 +60,20 @@ export const WheelchairInfo = function({
           </div>
         </div>
       </div>
-      <div className="buttons">
+      <div className="button-wheelchair">
         <button onClick={onCallGuest} className="button secondary">
           Back
         </button>
-        <input
-          type="file"
-          accept="image/*"
-          capture="environment"
-          onChange={handleFiles}
-        ></input>
+
+        <label class="button primary custom-file-upload">
+          <input
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handleFiles}
+          ></input>
+          <p class="done-wheelchair">Done</p>
+        </label>
       </div>
     </div>
   );

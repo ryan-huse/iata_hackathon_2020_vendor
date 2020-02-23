@@ -2,9 +2,6 @@
 
 .imageContainer {
   margin-top: 10%;
-  .photo {
-    max-width: 45%;
-  }
 }
 
 .grid {
@@ -46,6 +43,7 @@
         font-weight: 700;
 
         .instruction {
+          width: 100%;
           font-size: 12px;
           border: none;
           box-shadow: none;
@@ -68,4 +66,40 @@
   .message {
     font-size: 15px;
   }
+}
+
+.button-wheelchair {
+  height: 50px;
+  margin-bottom: 15px;
+  margin-left: 15px;
+  display: inline-flex;
+}
+
+.image-wheelchair {
+  height: 350px;
+  margin-top: 10px;
+  margin-left: 50px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  // border: 1px solid #ccc;
+  // display: inline-block;
+  margin-top: 2px;
+  cursor: pointer;
+  // margin-left: 10px;
+  // height: auto !important;
+  // margin-tio: 19px;
+  width: 21% !important;
+  height: 26px !important;
+  margin-left: 20px;
+  padding-left: 48px !important;
+}
+
+.done-wheelchair {
+  margin-top: 3px;
+  margin-left: 13px;
 }
