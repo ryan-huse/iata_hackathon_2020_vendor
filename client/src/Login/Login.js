@@ -6,13 +6,13 @@ import "./Login.scss";
 export const Login = function({ onLogin }) {
   return (
     <div className="">
-      <img src={login_top} alt="Login" />
+      <img src={login_top} className="img-login" alt="Login" />
       <div className="buttons">
-        <button className="button primary" onClick={() => onLogin()}>
+        <button className="button-login primary" onClick={() => onLogin()}>
           Continue
         </button>
       </div>
-      <img src={login_bottom} />
+      <img className="img-login" src={login_bottom} />
     </div>
   );
 };

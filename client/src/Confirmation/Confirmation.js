@@ -80,6 +80,7 @@ export const Confirmation = function({
           </div>
           <div className="imageContainer">
             <img
+              className="image-confirm"
               style={{ display: "none" }}
               ref={ref => handleFileUpload(ref)}
               width="150"
