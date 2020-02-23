@@ -8,7 +8,8 @@ class App extends Component {
   state = {
     response: "",
     post: "",
-    responseToPost: ""
+    responseToPost: "",
+    userId: ""
   };
 
   componentDidMount() {
@@ -27,12 +28,28 @@ class App extends Component {
 
   handleSubmit = async e => {
     e.preventDefault();
+
+    const airport = await fetch(
+      "https://geolocation-qa-west.azurewebsites.net/api/lookup/resolve",
+      {
+        method: "GET"
+      }
+    )
+      .then(async r => await r.json())
+      .catch(err => console.log(err));
     const response = await fetch("/api/world", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ post: this.state.post })
+      body: JSON.stringify({
+        post: this.state.post,
+        barcodeID: this.state.barcodeID,
+        airline: "Delta",
+        photographer: "109228",
+        date: new Date(),
+        airport: airport.ResolvedCity.NearestAlaskaDestination.Code
+      })
     });
     const body = await response.text();
 
@@ -61,11 +78,20 @@ class App extends Component {
           <p>
             <strong>Post to Server:</strong>
           </p>
+          Barcode #:
           <input
             type="text"
+            value={this.state.barcodeID}
+            onChange={e => this.setState({ barcodeID: e.target.value })}
+          />
+          <br />
+          Image:
+          <input
+            type="file"
             value={this.state.post}
             onChange={e => this.setState({ post: e.target.value })}
           />
+          <br />
           <button type="submit">Submit</button>
         </form>
         <p>{this.state.responseToPost}</p>
