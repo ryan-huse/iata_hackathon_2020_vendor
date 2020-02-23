@@ -1,0 +1,16 @@
+
+> fsevents@1.2.11 install /Users/diana.wang@alaskaair.com/Documents/GIT/IATA_Hackathon/iata_hackathon_2020_vendor/client/node_modules/jest-haste-map/node_modules/fsevents
+> node-gyp rebuild
+
+
+> fsevents@1.2.11 install /Users/diana.wang@alaskaair.com/Documents/GIT/IATA_Hackathon/iata_hackathon_2020_vendor/client/node_modules/watchpack/node_modules/fsevents
+> node-gyp rebuild
+
+
+> fsevents@1.2.11 install /Users/diana.wang@alaskaair.com/Documents/GIT/IATA_Hackathon/iata_hackathon_2020_vendor/client/node_modules/webpack-dev-server/node_modules/fsevents
+> node-gyp rebuild
+
+
+> fibers@4.0.2 install /Users/diana.wang@alaskaair.com/Documents/GIT/IATA_Hackathon/iata_hackathon_2020_vendor/client/node_modules/fibers
+> node build.js || nodejs build.js
+

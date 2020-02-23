@@ -73,7 +73,7 @@ export const WheelchairInfo = function({
             capture="environment"
             onChange={handleFiles}
           ></input>
-          <p class="done-wheelchair">Done</p>
+          <p class="done-wheelchair">Camera</p>
         </label>
       </div>
     </div>
