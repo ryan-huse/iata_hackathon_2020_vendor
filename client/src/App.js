@@ -1,52 +1,70 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import { BarcodeScanner } from "./BarcodeScanner/BarcodeScanner";
 import { Confirmation } from "./Confirmation/Confirmation";
 import { ScannerPhoto } from "./ScannerPhoto/ScannerPhoto";
 
 class App extends Component {
-  state = {
-    response: "",
-    post: "",
-    responseToPost: "",
-    page: "HOME",
-    userId: "",
-    barcodeID: "CI 419454",
-  };
-
-  componentDidMount() {
-    this.callApi()
-      .then(res => this.setState({ response: res.express }))
-      .catch(err => console.log(err));
+  constructor(props) {
+    super(props);
+    this.state = {
+      response: "",
+      post: "",
+      responseToPost: "",
+      page: "HOME",
+      userId: "",
+      barcodeID: "CI 419454"
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  callApi = async () => {
-    const response = await fetch("/api/hello");
-    const body = await response.json();
-    if (response.status !== 200) throw Error(body.message);
+  // componentDidMount() {
+  //   this.callApi()
+  //     .then(res => this.setState({ response: res.express }))
+  //     .catch(err => console.log(err));
+  // }
 
-    return body;
+  handleFileUpload = e => {
+    var demoImage = document.querySelector("img");
+    var file = this.fileUpload.files[0];
+    var reader = new FileReader();
+    reader.onload = function(event) {
+      demoImage.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+    console.log(file);
   };
 
+  // callApi = async () => {
+  //   const response = await fetch("/api/hello");
+  //   const body = await response.json();
+  //   if (response.status !== 200) throw Error(body.message);
+
+  //   return body;
+  // };
+
   handleSubmit = async e => {
-    e.preventDefault();
+    var file = this.fileUpload.files[0];
 
     const airport = await fetch(
-      "https://geolocation-qa-west.azurewebsites.net/api/lookup/resolve",
-      {
-        method: "GET"
-      }
+      "https://geolocation-qa-west.azurewebsites.net/api/lookup/resolve"
     )
       .then(async r => await r.json())
       .catch(err => console.log(err));
+    var buffer = new Buffer(
+      await new Response(file).arrayBuffer(),
+      "binary"
+    ).toString("base64");
+    console.log(buffer);
     const response = await fetch("/api/world", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        post: this.state.post,
+        name: file.name,
+        file: buffer,
+        length: file.size,
         barcodeID: this.state.barcodeID,
         airline: "Delta",
         photographer: "109228",
@@ -57,10 +75,13 @@ class App extends Component {
             : ""
           : ""
       })
-    });
-    const body = await response.text();
+    })
+      .then(info => console.log(info))
+      .catch(err => console.log(err));
 
-    this.setState({ responseToPost: body });
+    // const body = await response.text();
+
+    this.setState({ responseToPost: "airport" });
   };
 
   onConfirm = images => {
@@ -73,7 +94,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        {this.state.page === "BARCODESCANNER" ? (
+        {/* {this.state.page === "BARCODESCANNER" ? (
           <BarcodeScanner
             onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
           />
@@ -90,10 +111,22 @@ class App extends Component {
           </>
         ) : (
           <></>
-        )}
-
+        )} */}
+        Front
+        <input
+          type="file"
+          accept="image/*"
+          capture="environment"
+          ref={ref => (this.fileUpload = ref)}
+          onChange={this.handleFileUpload}
+        ></input>
+        <img
+          src={this.state.fileUpload ? this.state.fileUpload[0] : ""}
+          width="150"
+          alt="Thumb preview..."
+        ></img>
+        <button onClick={e => this.handleSubmit(e.target.value)}>Submit</button>
         <p>{this.state.post}</p>
-
         <p>{this.state.response}</p>
         <p>{this.state.responseToPost}</p>
       </div>
