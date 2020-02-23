@@ -33,9 +33,7 @@ class App extends Component {
     return body;
   };
 
-  handleSubmit = async e => {
-    e.preventDefault();
-
+  handleSubmit = async () => {
     const airport = await fetch(
       "https://geolocation-qa-west.azurewebsites.net/api/lookup/resolve",
       {
@@ -67,11 +65,12 @@ class App extends Component {
     this.setState({ responseToPost: body });
   };
 
-  onConfirm = images => {
-    console.log(images);
+  onConfirm = imageSrc => {
+    console.log(imageSrc);
     console.log("setting state");
-    this.setState({ post: images });
-    this.setState({ page: "HOME" });
+    this.setState({ post: imageSrc });
+    this.setState({ imageSrc: imageSrc });
+    this.setState({ page: "CONFIRMATION" });
   };
 
   render() {
@@ -88,10 +87,10 @@ class App extends Component {
             batteryType={this.state.batteryType}
             imageSrc={this.state.imageSrc}
             onBack={() => this.setState({ page: "SCANNERPHOTO" })}
-            onConfirm={() => this.submitData()}
+            sendData={() => this.handleSubmit()}
           />
         ) : this.state.page === "SCANNERPHOTO" ? (
-          <ScannerPhoto onConfirm={images => this.onConfirm(images)} />
+          <ScannerPhoto onConfirm={imageSrc => this.onConfirm(imageSrc)} />
         ) : this.state.page === "HOME" ? (
           <>
             <button onClick={() => this.setState({ page: "BARCODESCANNER" })}>
@@ -102,11 +101,6 @@ class App extends Component {
         ) : (
           <></>
         )}
-
-        <p>{this.state.post}</p>
-
-        <p>{this.state.response}</p>
-        <p>{this.state.responseToPost}</p>
       </div>
     );
   }

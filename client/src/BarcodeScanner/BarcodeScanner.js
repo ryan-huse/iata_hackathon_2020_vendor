@@ -4,7 +4,7 @@ import "./BarcodeScanner.css";
 export const BarcodeScanner = ({ onSuccess }) => {
   return (
     <div>
-      <h1>Scan Barcode</h1>
+      <div className="header">Scan Barcode</div>
       <span>
         If the barode is properly registered, the photo page will automatically
         pull up.

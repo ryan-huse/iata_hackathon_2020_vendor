@@ -1,80 +1,148 @@
 $borderColor: #c4c4c4;
 
-.information {
-  display: flex;
-  flex-direction: column;
+.wrapper {
+  position: relative;
+  height: 100vh;
 
-  .infoItem {
-    display: flex;
-    .description,
-    .data {
-      border-bottom: 2px solid $borderColor;
-      padding: 15px;
-    }
-    .description {
-      width: 50%;
-      text-align: left;
-      background-color: #eee;
-      border-right: 2px solid $borderColor;
-      font-weight: 300;
-    }
-    .data {
-      width: 50%;
-      text-align: right;
-
-      &.data-icon {
-        display: flex;
-
-        .dataText {
-          width: 90%;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          padding-right: 5px;
-        }
-
-        .batteryIcon {
-          width: 10%;
-          margin: auto;
-        }
-      }
-    }
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5); /*dim the background*/
+    height: 100vh;
   }
 
-  .imageContainer {
+  .modal {
+    width: 90%;
+    height: 60%;
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    margin-top: -25%;
+    margin-left: -45%;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 11; /* 1px higher than the overlay layer */
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin: 20px auto;
 
-    img {
-      max-width: 70%;
+    .modalText {
+      font-size: 25px;
+      overflow: auto;
+      color: white;
+      font-weight: 600;
+      padding: 10px;
+    }
+
+    .successContainer {
+      display: flex;
+      flex-direction: column;
+      .iconContainer {
+        .modalIcon {
+          max-width: 50%;
+          background-color: transparent;
+        }
+      }
+    }
+
+    .questionContainer {
+      display: flex;
+      flex-direction: column;
+      margin-top: 50px;
     }
   }
+}
 
-  .buttons {
+.confirmation {
+  height: 100vh;
+  .content {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    justify-content: space-between;
+    .buttons {
+      margin-bottom: 10%;
+    }
+    .information {
+      display: flex;
+      flex-direction: column;
 
-    .button {
-      font-size: 15px;
-      border: none;
-      box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.35);
-      padding: 8px 40px;
-      border-radius: 5px;
-      text-transform: uppercase;
-      font-weight: 700;
-      width: 45%;
+      .infoItem {
+        display: flex;
+        .description,
+        .data {
+          border-bottom: 2px solid $borderColor;
+          padding: 15px;
+        }
+        .description {
+          width: 50%;
+          text-align: left;
+          background-color: #eee;
+          border-right: 2px solid $borderColor;
+          font-weight: 300;
+        }
+        .data {
+          width: 50%;
+          text-align: right;
 
-      &.primary {
-        background-color: white;
-        color: #4c7b11;
-        border: 1px solid $borderColor;
+          &.data-icon {
+            display: flex;
+
+            .dataText {
+              width: 90%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              padding-right: 5px;
+            }
+
+            .batteryIcon {
+              width: 10%;
+              margin: auto;
+            }
+          }
+        }
       }
+    }
+  }
+}
 
-      &.secondary {
-        background-color: #4c7b11;
-        color: white;
-      }
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  margin: 20px auto;
+
+  img {
+    max-width: 70%;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+
+  .button {
+    font-size: 15px;
+    border: none;
+    box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.35);
+    padding: 8px 40px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    width: 45%;
+
+    &.primary {
+      background-color: white;
+      color: #4c7b11;
+      border: 1px solid $borderColor;
+    }
+
+    &.secondary {
+      background-color: #4c7b11;
+      color: white;
     }
   }
 }
