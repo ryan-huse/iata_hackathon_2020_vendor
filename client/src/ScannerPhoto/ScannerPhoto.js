@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./ScannerPhoto.css";
 import { WebcamCapture } from "./WebcamCapture";
-import { compress } from "lz-string";
 
 export const ScannerPhoto = function({ onConfirm }) {
   const [images, setImages] = useState([]);
@@ -9,7 +8,7 @@ export const ScannerPhoto = function({ onConfirm }) {
 
   function onCapture(image) {
     console.log(image);
-    images.push(compress(image));
+    images.push(image);
     console.log(images);
     setImages(images);
     setImage(image);
