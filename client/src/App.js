@@ -1,9 +1,12 @@
 import Dynamsoft from "dynamsoft-node-barcode";
 import React, { Component } from "react";
-import "./App.css";
+import logo from "./logo.svg";
+import "./App.scss";
+
 import { BarcodeScanner } from "./BarcodeScanner/BarcodeScanner";
 import { Confirmation } from "./Confirmation/Confirmation";
-import { ScannerPhoto } from "./ScannerPhoto/ScannerPhoto";
+import { Login } from "./Login/Login";
+import { WheelchairInfo } from "./WheelchairInfo/WheelchairInfo";
 
 class App extends Component {
   constructor(props) {
@@ -12,9 +15,13 @@ class App extends Component {
       response: "",
       post: "",
       responseToPost: "",
-      page: "HOME",
+      page: "LOGIN",
       userId: "",
-      barcodeID: "CI 419454"
+      imageSrc: "",
+      barcodeID: "90060000001",
+      flightInfo: "CI 0757-SEA",
+      batteryType: "Wet Cell - WCBW",
+      imageFile: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -28,26 +35,18 @@ class App extends Component {
     this.imageTag.style.display = "inline";
   };
 
-  // callApi = async () => {
-  //   const response = await fetch("/api/hello");
-  //   const body = await response.json();
-  //   if (response.status !== 200) throw Error(body.message);
-
-  //   return body;
-  // };
-
   handleSubmit = async e => {
-    var file = this.fileUpload.files[0];
-    var stuff;
     const airport = await fetch(
       "https://geolocation-qa-west.azurewebsites.net/api/lookup/resolve"
     )
       .then(async r => await r.json())
       .catch(err => console.log(err));
     var buffer = new Buffer(
-      await new Response(file).arrayBuffer(),
+      await new Response(this.state.imageFile).arrayBuffer(),
       "binary"
     ).toString("base64");
+
+    console.log(buffer);
 
     const response = await fetch("/api/world", {
       method: "POST",
@@ -55,9 +54,9 @@ class App extends Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        name: file.name,
+        name: this.state.imageFile.name,
         file: buffer,
-        length: file.size,
+        length: this.state.imageFile.size,
         barcodeID: this.state.barcodeID,
         airline: "Delta",
         photographer: "109228",
@@ -79,11 +78,16 @@ class App extends Component {
     this.setState({ responseToPost: "airport" });
   };
 
-  onConfirm = images => {
-    console.log(images);
+  onConfirm = imageSrc => {
+    console.log(imageSrc);
     console.log("setting state");
-    this.setState({ post: images });
-    this.setState({ page: "HOME" });
+    this.setState({ post: imageSrc });
+    this.setState({ imageSrc: imageSrc });
+    this.setState({ page: "CONFIRMATION" });
+  };
+
+  onCallGuest = () => {
+    console.log("on call guest: not yet implemented");
   };
 
   render() {
@@ -93,42 +97,34 @@ class App extends Component {
           <BarcodeScanner
             onSuccess={txt => {
               this.setState({ barcodeID: txt });
-              this.setState({ page: "SCANNERPHOTO" });
+              this.setState({ page: "WHEELCHAIRINFO" });
             }}
           />
+        ) : this.state.page === "LOGIN" ? (
+          <Login onLogin={() => this.setState({ page: "BARCODESCANNER" })} />
+        ) : this.state.page === "WHEELCHAIRINFO" ? (
+          <WheelchairInfo
+            batteryType={this.state.batteryType}
+            onCallGuest={this.onCallGuest}
+            setImageFile={imageFile => this.setState({ imageFile: imageFile })}
+            showNextPage={() => {
+              this.setState({ page: "CONFIRMATION" });
+            }}
+            barcodeID={this.state.barcodeID}
+          />
         ) : this.state.page === "CONFIRMATION" ? (
-          <Confirmation onConfirm={() => this.submitData()} />
-        ) : this.state.page === "SCANNERPHOTO" ? (
-          <ScannerPhoto onConfirm={images => this.onConfirm(images)} />
-        ) : this.state.page === "HOME" ? (
-          <>
-            <button onClick={() => this.setState({ page: "BARCODESCANNER" })}>
-              Open Barcode Scanner
-            </button>
-            <button onClick={() => this.handleSubmit()}>Submit</button>
-          </>
+          <Confirmation
+            barcodeID={this.state.barcodeID}
+            flightInfo={this.state.flightInfo}
+            batteryType={this.state.batteryType}
+            onBack={() => this.setState({ page: "WHEELCHAIRINFO" })}
+            handleSubmit={() => this.handleSubmit()}
+            onExit={() => this.setState({ page: "LOGIN" })}
+            imageFile={this.state.imageFile}
+          />
         ) : (
           <></>
-        )}{" "}
-        } />
-        <input
-          type="file"
-          accept="image/*"
-          capture="environment"
-          ref={ref => (this.fileUpload = ref)}
-          onChange={this.handleFileUpload}
-        ></input>
-        <img
-          id="stuffs"
-          style={{ display: "none" }}
-          ref={ref => (this.imageTag = ref)}
-          width="150"
-          alt="Thumb preview..."
-        ></img>
-        <button onClick={e => this.handleSubmit(e.target.value)}>Submit</button>
-        <p>{this.state.post}</p>
-        <p>{this.state.response}</p>
-        <p>{this.state.responseToPost}</p>
+        )}
       </div>
     );
   }
