@@ -5,7 +5,6 @@ const {
   BlobServiceClient,
   StorageSharedKeyCredential
 } = require("@azure/storage-blob");
-const { DefaultAzureCredential } = require("@azure/identity");
 require("dotenv").config();
 
 const app = express();
@@ -23,7 +22,6 @@ app.post("/api/world", async (req, res) => {
   const account = "iatahackathonstorage";
   const accountKey =
     "tDmDvkKhrTDPIf3WuM40GfVuDefqc3YC41mcU39UkHn2GZrDZ09bLRV4fIpDLTylK5dWeNiESKY58DfmZU2bAg==";
-  // const defaultAzureCredential = new DefaultAzureCredential();
   const sharedKeyCredential = new StorageSharedKeyCredential(
     account,
     accountKey

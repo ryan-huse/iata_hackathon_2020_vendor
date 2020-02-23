@@ -9,7 +9,6 @@
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
   },
   "dependencies": {
-    "@azure/identity": "^1.0.2",
     "@azure/storage-blob": "^12.1.0",
     "body-parser": "^1.18.3",
     "dotenv": "^8.2.0",

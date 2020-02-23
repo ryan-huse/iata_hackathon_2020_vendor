@@ -48,7 +48,11 @@ class App extends Component {
         airline: "Delta",
         photographer: "109228",
         date: new Date(),
-        airport: airport.ResolvedCity.NearestAlaskaDestination.Code
+        airport: airport.ResolvedCity
+          ? airport.ResolvedCity.NearestAlaskaDestination
+            ? airport.ResolvedCity.NearestAlaskaDestination.Code
+            : ""
+          : ""
       })
     });
     const body = await response.text();
