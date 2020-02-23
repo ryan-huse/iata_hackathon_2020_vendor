@@ -24,15 +24,13 @@ class App extends Component {
   //     .catch(err => console.log(err));
   // }
 
-  handleFileUpload = e => {
-    var demoImage = document.querySelector("img");
+  handleFileUpload = async () => {
     var file = this.fileUpload.files[0];
-    var reader = new FileReader();
-    reader.onload = function(event) {
-      demoImage.src = reader.result;
-    };
-    reader.readAsDataURL(file);
-    console.log(file);
+    this.imageTag.src = `data:image/png;base64,${new Buffer(
+      await new Response(file).arrayBuffer(),
+      "binary"
+    ).toString("base64")}`;
+    this.imageTag.style.display = "inline";
   };
 
   // callApi = async () => {
@@ -45,7 +43,7 @@ class App extends Component {
 
   handleSubmit = async e => {
     var file = this.fileUpload.files[0];
-
+    var stuff;
     const airport = await fetch(
       "https://geolocation-qa-west.azurewebsites.net/api/lookup/resolve"
     )
@@ -55,7 +53,7 @@ class App extends Component {
       await new Response(file).arrayBuffer(),
       "binary"
     ).toString("base64");
-    console.log(buffer);
+
     const response = await fetch("/api/world", {
       method: "POST",
       headers: {
@@ -69,9 +67,11 @@ class App extends Component {
         airline: "Delta",
         photographer: "109228",
         date: new Date(),
-        airport: airport.ResolvedCity
-          ? airport.ResolvedCity.NearestAlaskaDestination
-            ? airport.ResolvedCity.NearestAlaskaDestination.Code
+        airport: airport
+          ? airport.ResolvedCity
+            ? airport.ResolvedCity.NearestAlaskaDestination
+              ? airport.ResolvedCity.NearestAlaskaDestination.Code
+              : ""
             : ""
           : ""
       })
@@ -112,7 +112,7 @@ class App extends Component {
         ) : (
           <></>
         )} */}
-        Front
+
         <input
           type="file"
           accept="image/*"
@@ -121,7 +121,8 @@ class App extends Component {
           onChange={this.handleFileUpload}
         ></input>
         <img
-          src={this.state.fileUpload ? this.state.fileUpload[0] : ""}
+          style={{ display: "none" }}
+          ref={ref => (this.imageTag = ref)}
           width="150"
           alt="Thumb preview..."
         ></img>
