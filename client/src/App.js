@@ -1,10 +1,10 @@
+import Dynamsoft from "dynamsoft-node-barcode";
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.scss";
 
 import { BarcodeScanner } from "./BarcodeScanner/BarcodeScanner";
 import { Confirmation } from "./Confirmation/Confirmation";
-import { ScannerPhoto } from "./ScannerPhoto/ScannerPhoto";
 import { Login } from "./Login/Login";
 import { WheelchairInfo } from "./WheelchairInfo/WheelchairInfo";
 
@@ -26,11 +26,14 @@ class App extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.callApi()
-  //     .then(res => this.setState({ response: res.express }))
-  //     .catch(err => console.log(err));
-  // }
+  handleFileUpload = async () => {
+    var file = this.fileUpload.files[0];
+    this.imageTag.src = `data:image/png;base64,${new Buffer(
+      await new Response(file).arrayBuffer(),
+      "binary"
+    ).toString("base64")}`;
+    this.imageTag.style.display = "inline";
+  };
 
   handleSubmit = async e => {
     const airport = await fetch(
@@ -88,16 +91,17 @@ class App extends Component {
   };
 
   render() {
-    const fileUploadRef = React.createRef();
-
     return (
       <div className="App">
-        {this.state.page === "LOGIN" ? (
-          <Login onLogin={() => this.setState({ page: "BARCODESCANNER" })} />
-        ) : this.state.page === "BARCODESCANNER" ? (
+        {this.state.page === "BARCODESCANNER" ? (
           <BarcodeScanner
-            onSuccess={() => this.setState({ page: "WHEELCHAIRINFO" })}
+            onSuccess={txt => {
+              this.setState({ barcodeID: txt });
+              this.setState({ page: "WHEELCHAIRINFO" });
+            }}
           />
+        ) : this.state.page === "LOGIN" ? (
+          <Login onLogin={() => this.setState({ page: "BARCODESCANNER" })} />
         ) : this.state.page === "WHEELCHAIRINFO" ? (
           <WheelchairInfo
             batteryType={this.state.batteryType}
@@ -106,20 +110,14 @@ class App extends Component {
             showNextPage={() => {
               this.setState({ page: "CONFIRMATION" });
             }}
-          />
-        ) : this.state.page === "SCANNERPHOTO" ? (
-          <ScannerPhoto
-            onChange={this.handle}
-            onConfirm={imageSrc => this.onConfirm(imageSrc)}
-            fileUploadRef={fileUploadRef}
-            handleSubmit={value => this.handleSubmit(value)}
+            barcodeID={this.state.barcodeID}
           />
         ) : this.state.page === "CONFIRMATION" ? (
           <Confirmation
             barcodeID={this.state.barcodeID}
             flightInfo={this.state.flightInfo}
             batteryType={this.state.batteryType}
-            onBack={() => this.setState({ page: "SCANNERPHOTO" })}
+            onBack={() => this.setState({ page: "WHEELCHAIRINFO" })}
             handleSubmit={() => this.handleSubmit()}
             onExit={() => this.setState({ page: "LOGIN" })}
             imageFile={this.state.imageFile}

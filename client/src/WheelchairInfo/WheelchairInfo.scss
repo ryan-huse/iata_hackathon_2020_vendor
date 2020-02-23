@@ -4,6 +4,11 @@
   margin-top: 10%;
 }
 
+.header {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
 .grid {
   .gridTitle {
     background-color: #747474;
@@ -66,6 +71,10 @@
   .message {
     font-size: 15px;
   }
+}
+
+.button.secondary {
+  height: 40px;
 }
 
 .button-wheelchair {

@@ -7,7 +7,8 @@ export const WheelchairInfo = function({
   batteryType,
   onCallGuest,
   setImageFile,
-  showNextPage
+  showNextPage,
+  barcodeID
 }) {
   function handleFiles(e) {
     setImageFile(e.target.files[0]);
@@ -30,7 +31,7 @@ export const WheelchairInfo = function({
           <div className="information">
             <div className="infoItem">
               <div className="column description">Equipment Barcode</div>
-              <div className="column data"></div>
+              <div className="column data">{barcodeID}</div>
               <div className="column instructionContainer">
                 <button className="button secondary instruction">
                   Instructions

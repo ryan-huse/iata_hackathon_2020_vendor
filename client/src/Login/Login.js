@@ -8,7 +8,7 @@ export const Login = function({ onLogin }) {
     <div className="">
       <img src={login_top} className="img-login" alt="Login" />
       <div className="buttons">
-        <button className="button-login primary" onClick={() => onLogin()}>
+        <button className="button primary" onClick={() => onLogin()}>
           Continue
         </button>
       </div>
