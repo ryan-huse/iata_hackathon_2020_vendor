@@ -82,42 +82,14 @@ class App extends Component {
             onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
           />
         ) : this.state.page === "CONFIRMATION" ? (
-          <Confirmation onConfirm={() => this.submitData()} />
-        ) : this.state.page === "SCANNERPHOTO" ? (
-          <ScannerPhoto onConfirm={images => this.onConfirm(images)} />
-        ) : this.state.page === "HOME" ? (
-          <>
-            <button onClick={() => this.setState({ page: "BARCODESCANNER" })}>
-              Open Barcode Scanner
-            </button>
-            <button onClick={() => this.handleSubmit()}>Submit</button>
-          </>
-        ) : (
-          <></>
-        )}
-
-        <p>{this.state.post}</p>
-        
-        <p>{this.state.response}</p>
-        <form onSubmit={this.handleSubmit}>
-          <p>
-            <strong>Post to Server:</strong>
-          </p>
-          Barcode #:
-          <input
-            type="text"
-            value={this.state.barcodeID}
-            onChange={e => this.setState({ barcodeID: e.target.value })}
-          />
-        ) : this.state.page === "CONFIRMATION" ? (
           <Confirmation
-          barcodeID={this.state.barcodeID}
-          flightInfo={this.state.flightInfo}
-          batteryType={this.state.batteryType}
-          imageSrc={this.state.imageSrc}
-          onBack={() => this.setState({ page: "SCANNERPHOTO" })}
-          onConfirm={() => this.submitData()}
-        />
+            barcodeID={this.state.barcodeID}
+            flightInfo={this.state.flightInfo}
+            batteryType={this.state.batteryType}
+            imageSrc={this.state.imageSrc}
+            onBack={() => this.setState({ page: "SCANNERPHOTO" })}
+            onConfirm={() => this.submitData()}
+          />
         ) : this.state.page === "SCANNERPHOTO" ? (
           <ScannerPhoto onConfirm={images => this.onConfirm(images)} />
         ) : this.state.page === "HOME" ? (
