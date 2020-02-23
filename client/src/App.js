@@ -77,18 +77,6 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Confirmation
-          barcodeID={this.state.barcodeID}
-          flightInfo={this.state.flightInfo}
-          batteryType={this.state.batteryType}
-          imageSrc={this.state.imageSrc}
-          onBack={() => this.setState({ page: "SCANNERPHOTO" })}
-          onConfirm={() => this.submitData()}
-        />
-      </div>
-    );
-    /*return (
-      <div className="App">
         {this.state.page === "BARCODESCANNER" ? (
           <BarcodeScanner
             onSuccess={() => this.setState({ page: "SCANNERPHOTO" })}
@@ -122,7 +110,14 @@ class App extends Component {
             onChange={e => this.setState({ barcodeID: e.target.value })}
           />
         ) : this.state.page === "CONFIRMATION" ? (
-          <Confirmation onConfirm={() => this.submitData()} />
+          <Confirmation
+          barcodeID={this.state.barcodeID}
+          flightInfo={this.state.flightInfo}
+          batteryType={this.state.batteryType}
+          imageSrc={this.state.imageSrc}
+          onBack={() => this.setState({ page: "SCANNERPHOTO" })}
+          onConfirm={() => this.submitData()}
+        />
         ) : this.state.page === "SCANNERPHOTO" ? (
           <ScannerPhoto onConfirm={images => this.onConfirm(images)} />
         ) : this.state.page === "HOME" ? (
@@ -141,7 +136,7 @@ class App extends Component {
         <p>{this.state.response}</p>
         <p>{this.state.responseToPost}</p>
       </div>
-    );*/
+    );
   }
 }
 
